@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "./App.css";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
 import SearchBox from "./components/SearchBox/SearchBox";
+import "./App.css";
 
 function App() {
   const [contacts, setContacts] = useState([
@@ -12,12 +12,23 @@ function App() {
     { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
   ]);
 
+  const [defaultFilterValue, setDefaultFilterValue] = useState("");
+
+  const handleChangeFilter = (value) => {
+    setDefaultFilterValue(value);
+  };
+
+  const filteredContacts = contacts.filter(({ name }) =>
+    // чтобы фильтр работал только по началу имени вместо метода includes() стоит использовать метод startsWith()
+    name.toLowerCase().startsWith(defaultFilterValue.trim().toLowerCase())
+  );
+
   return (
     <>
       {/* <h1>Phonebook</h1> */}
       <ContactForm />
-      <SearchBox />
-      <ContactList contacts={contacts} />
+      <SearchBox handleChangeFilter={handleChangeFilter} />
+      <ContactList contacts={filteredContacts} />
     </>
   );
 }
