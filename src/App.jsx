@@ -29,6 +29,9 @@ function App() {
     ]);
   };
 
+  const deleteContact = (id) =>
+    setContacts(contacts.filter((contact) => contact.id !== id));
+
   const handleChangeFilter = (value) => {
     setDefaultFilterValue(value);
   };
@@ -43,7 +46,7 @@ function App() {
       <h1>Phonebook</h1>
       <ContactForm addContact={addContact} />
       <SearchBox handleChangeFilter={handleChangeFilter} />
-      <ContactList contacts={filteredContacts} />
+      <ContactList contacts={filteredContacts} deleteContact={deleteContact} />
     </>
   );
 }
