@@ -4,8 +4,14 @@ import styles from "./ContactForm.module.css";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("required").min(3).max(50),
-  number: Yup.string().required("required").min(7),
+  name: Yup.string()
+    .required("name must be at least 3 characters")
+    .min(3)
+    .max(50),
+  number: Yup.string()
+    .required("number must be at least 7 characters")
+    .min(7)
+    .max(7),
 });
 
 function ContactForm({ addContact }) {
