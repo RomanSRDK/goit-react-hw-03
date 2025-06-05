@@ -1,14 +1,14 @@
-import { Formik, Form, Field } from "formik";
-import { object, string } from "yup";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useId } from "react";
 import styles from "./ContactForm.module.css";
+import * as Yup from "yup";
 
-function ContactForm() {
-  let userSchema = object({
-    name: string().required().min(3).max(50),
-    number: string().required().max(9),
-  });
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("required").min(3).max(50),
+  number: Yup.string().required("required").min(7),
+});
 
+function ContactForm({ addContact }) {
   const nameFieldId = useId();
   const emailFieldId = useId();
 
@@ -18,16 +18,20 @@ function ContactForm() {
   };
 
   const handleSubmit = (values, { resetForm }) => {
-    if (!Object.values(values).every((value) => value.trim() !== "")) {
-      return;
-    }
-    console.log(values);
+    // if (!Object.values(values).every((value) => value.trim() !== "")) {
+    //   return;
+    // }
+    addContact(values);
     resetForm();
   };
 
   return (
     <>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
         <Form className={styles.form}>
           <div className={styles.fieldGroup}>
             <label htmlFor={nameFieldId} className={styles.label}>
@@ -38,6 +42,11 @@ function ContactForm() {
               name="name"
               type="text"
               className={styles.input}
+            />
+            <ErrorMessage
+              name="name"
+              component="div"
+              className={styles.error}
             />
           </div>
 
@@ -50,6 +59,11 @@ function ContactForm() {
               name="number"
               type="text"
               className={styles.input}
+            />
+            <ErrorMessage
+              name="number"
+              component="div"
+              className={styles.error}
             />
           </div>
 

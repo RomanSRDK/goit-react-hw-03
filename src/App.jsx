@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
@@ -14,6 +15,20 @@ function App() {
 
   const [defaultFilterValue, setDefaultFilterValue] = useState("");
 
+  const addContact = ({ name, number }) => {
+    const formattedName = name
+      .toLowerCase()
+      .split("")
+      .map((char, index) => (index === 0 ? char.toUpperCase() : char))
+      .join("");
+    const formattedNumber = number.replace(/(\d{3})(\d{2})(\d{2})/, "$1-$2-$3");
+
+    setContacts([
+      ...contacts,
+      { name: formattedName, number: formattedNumber, id: nanoid() },
+    ]);
+  };
+
   const handleChangeFilter = (value) => {
     setDefaultFilterValue(value);
   };
@@ -25,8 +40,8 @@ function App() {
 
   return (
     <>
-      {/* <h1>Phonebook</h1> */}
-      <ContactForm />
+      <h1>Phonebook</h1>
+      <ContactForm addContact={addContact} />
       <SearchBox handleChangeFilter={handleChangeFilter} />
       <ContactList contacts={filteredContacts} />
     </>
